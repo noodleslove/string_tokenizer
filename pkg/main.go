@@ -1,8 +1,8 @@
 package main
 
 import (
-	. "fake.com/string_tokenizer/pkg/str_tokenizer"
 	"fmt"
+	. "github.com/noodleslove/string_tokenizer/pkg/str_tokenizer"
 )
 
 func main() {
