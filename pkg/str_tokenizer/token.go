@@ -1,4 +1,4 @@
-package tokenizer
+package str_tokenizer
 
 import (
 	"fmt"

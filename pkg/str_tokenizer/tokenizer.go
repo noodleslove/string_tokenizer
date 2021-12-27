@@ -1,4 +1,4 @@
-package tokenizer
+package str_tokenizer
 
 // Table setup
 const MAX_COLUMNS int = 130
@@ -16,24 +16,28 @@ const PUNC string = ",.?!'[]{}/"
 
 var Table [MAX_ROWS][MAX_COLUMNS]int
 
-type Tokenizer struct {
+type StrTokenizer struct {
 	buffer []rune
 	pos    int
 }
 
-func NewTokenizer() *Tokenizer {
-	p := Tokenizer{pos: 0}
+func NewStrTokenizer() *StrTokenizer {
+	p := StrTokenizer{pos: 0}
 	if Table[MAX_ROWS-1][1] != -1 {
 		p.MakeTable(&Table)
 	}
 	return &p
 }
 
-func (s *Tokenizer) Buffer() string {
+func (s *StrTokenizer) Buffer() string {
 	return string(s.buffer)
 }
 
-func (s *Tokenizer) MakeTable(table *[MAX_ROWS][MAX_COLUMNS]int) {
+func (s *StrTokenizer) Pos() int {
+	return s.pos
+}
+
+func (s *StrTokenizer) MakeTable(table *[MAX_ROWS][MAX_COLUMNS]int) {
 	InitTable(table)
 
 	// Alpha pattern
@@ -65,20 +69,20 @@ func (s *Tokenizer) MakeTable(table *[MAX_ROWS][MAX_COLUMNS]int) {
 	MarkCell(SPACE_STATE, table, ' ', SPACE_STATE+1)
 }
 
-func (s *Tokenizer) Done() bool {
+func (s *StrTokenizer) Done() bool {
 	return s.pos >= len(s.buffer)
 }
 
-func (s *Tokenizer) More() bool {
+func (s *StrTokenizer) More() bool {
 	return s.pos < len(s.buffer)
 }
 
-func (s *Tokenizer) SetString(str string) {
+func (s *StrTokenizer) SetString(str string) {
 	s.buffer = []rune(str)
 	s.pos = 0
 }
 
-func (s *Tokenizer) GetToken(start_state int, token *string) bool {
+func (s *StrTokenizer) GetToken(start_state int, token *string) bool {
 	// Initialize variables
 	last_success := -1
 	current_pos := s.pos
@@ -130,7 +134,7 @@ func (s *Tokenizer) GetToken(start_state int, token *string) bool {
 	return true
 }
 
-func (s *Tokenizer) Tokenize() *Token {
+func (s *StrTokenizer) Tokenize() *Token {
 	if s.Done() {
 		panic("Reach string end")
 	}
